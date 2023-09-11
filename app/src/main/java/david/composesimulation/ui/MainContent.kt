@@ -1,6 +1,7 @@
 package david.composesimulation.ui
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,13 +24,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import david.composesimulation.MainViewModel
 import david.composesimulation.description
-import david.composesimulation.ui.derivedstateof.WronglyContentWithMoveToTop
 import david.composesimulation.ui.derivedstateof.CorrectlyContentWithMoveToTop
+import david.composesimulation.ui.derivedstateof.WrongEmailWithEndOfEmailReachedListener
+import david.composesimulation.ui.derivedstateof.WronglyContentWithMoveToTop
 import david.composesimulation.ui.launchedeffect.LaunchedEffectEmailWithMarkAsRead
 import david.composesimulation.ui.launchedeffect.ShowRelevantContentScreenAfterDelay
 import david.composesimulation.ui.launchedeffect.SnackbarThatGetsMessageFromOutside
 import david.composesimulation.ui.launchedeffect.SnackbarWithLaunchedEffect
-import david.composesimulation.ui.derivedstateof.WrongEmailWithEndOfEmailReachedListener
 import david.composesimulation.ui.producestate.CorrectlyProduceStateWithContinuousEurRate
 import david.composesimulation.ui.producestate.WronglyProduceStateWithContinuousEurRateUsingLaunchedEffect
 import david.composesimulation.ui.remembercoroutinescope.SnackbarWithCoroutineScope
@@ -55,10 +56,7 @@ fun MainContent(viewModel: MainViewModel) {
                 Menu(navController, destinations)
             }
             destinations.forEach { (key, content) ->
-                composable(
-                    route = key,
-                    content = content
-                )
+                composable(route = key, content = content)
             }
         }
     }
@@ -67,7 +65,7 @@ fun MainContent(viewModel: MainViewModel) {
 @Composable
 private fun Menu(
     navController: NavHostController,
-    destinations: Map<String, @Composable (NavBackStackEntry) -> Unit>,
+    destinations: Map<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -90,7 +88,7 @@ private fun Menu(
 }
 
 private fun getDestinations(viewModel: MainViewModel) =
-    mutableMapOf<String, @Composable (NavBackStackEntry) -> Unit>().apply {
+    mutableMapOf<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>().apply {
         put("WronglyChangingStateWithoutRememberAndMutableState") {
             WronglyChangingStateWithoutRememberAndMutableState()
         }
