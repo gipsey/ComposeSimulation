@@ -29,12 +29,15 @@ class ExampleStartupBenchmark {
     @Test
     fun startup() =
         benchmarkRule.measureRepeated(
-            packageName = "david.composesimulation",
+            packageName = TARGET_APP_PACKAGE_ID,
             metrics = listOf(StartupTimingMetric()),
             iterations = 2,
-            startupMode = StartupMode.COLD
+            startupMode = StartupMode.COLD,
+            setupBlock = {
+                // Press home button before each run to ensure the starting activity isn't visible.
+                pressHome()
+            }
         ) {
-            pressHome()
             startActivityAndWait()
         }
 }
