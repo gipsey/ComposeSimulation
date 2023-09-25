@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ComposeSimulation"
 include(":app")
- 
+include(":macrobenchmark")

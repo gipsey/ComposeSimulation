@@ -24,17 +24,23 @@ android {
 
     buildTypes {
         debug {
+            isDebuggable = true
             isMinifyEnabled = false
             isShrinkResources = false
         }
         release {
+            isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
-
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
         }
     }
     compileOptions {
@@ -74,7 +80,6 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
     androidTestImplementation(platform(libs.compose.bom))
     debugImplementation(libs.ui.test.manifest)
 
