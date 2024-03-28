@@ -24,13 +24,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import david.composesimulation.MainViewModel
 import david.composesimulation.description
+import david.composesimulation.ui.boxWithConstraints.BoxWithConstraints1
 import david.composesimulation.ui.derivedstateof.CorrectlyContentWithMoveToTop
 import david.composesimulation.ui.derivedstateof.WrongEmailWithEndOfEmailReachedListener
 import david.composesimulation.ui.derivedstateof.WronglyContentWithMoveToTop
+import david.composesimulation.ui.intrinsic.Intrinsic1
+import david.composesimulation.ui.intrinsic.Intrinsic2
 import david.composesimulation.ui.launchedeffect.LaunchedEffectEmailWithMarkAsRead
 import david.composesimulation.ui.launchedeffect.ShowRelevantContentScreenAfterDelay
 import david.composesimulation.ui.launchedeffect.SnackbarThatGetsMessageFromOutside
 import david.composesimulation.ui.launchedeffect.SnackbarWithLaunchedEffect
+import david.composesimulation.ui.layout.Layout1
+import david.composesimulation.ui.layoutmodifier.LayoutModifier1
 import david.composesimulation.ui.producestate.CorrectlyProduceStateWithContinuousEurRate
 import david.composesimulation.ui.producestate.WronglyProduceStateWithContinuousEurRateUsingLaunchedEffect
 import david.composesimulation.ui.remembercoroutinescope.SnackbarWithCoroutineScope
@@ -39,6 +44,9 @@ import david.composesimulation.ui.rememberupdatedstate.WronglyShowElapsedSeconds
 import david.composesimulation.ui.state.CorrectlyChangingState
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRemember
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRememberAndMutableState
+import david.composesimulation.ui.subcompose.SubCompose1
+import david.composesimulation.ui.subcompose.SubCompose2
+import david.composesimulation.ui.subcompose.Subcompose3
 import david.composesimulation.ui.theme.ComposeSimulationTheme
 import kotlinx.coroutines.delay
 
@@ -89,6 +97,32 @@ private fun Menu(
 
 private fun getDestinations(viewModel: MainViewModel) =
     mutableMapOf<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>().apply {
+        put("LayoutModifier1") {
+            LayoutModifier1()
+        }
+        put("Layout1") {
+            Layout1()
+        }
+        put("Intrinsic1") {
+            Intrinsic1()
+        }
+        put("Intrinsic2") {
+            Intrinsic2()
+        }
+        put("SubCompose1") {
+            SubCompose1()
+        }
+        put("SubCompose2") {
+            SubCompose2()
+        }
+        put("Subcompose3") {
+            Subcompose3()
+        }
+        put("BoxWithConstraints1") {
+            BoxWithConstraints1()
+        }
+
+
         put("WronglyChangingStateWithoutRememberAndMutableState") {
             WronglyChangingStateWithoutRememberAndMutableState()
         }

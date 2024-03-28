@@ -77,6 +77,9 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.tooling)
 
+    implementation(libs.constraintlayout.compose)
+    implementation(libs.constraintlayout.compose.android)
+
     androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
