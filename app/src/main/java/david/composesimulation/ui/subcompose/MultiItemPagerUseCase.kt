@@ -45,10 +45,8 @@ private val elements =
     )
 
 @Composable
-fun Subcompose3() {
-    Column(
-        modifier = Modifier
-    ) {
+fun MultiItemPagerUseCase() {
+    Column {
         var lastDisplayedElementIndex by rememberSaveable { mutableStateOf<Int?>(null) }
         var elementIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -66,7 +64,7 @@ fun Subcompose3() {
             Text(text = "Next page")
         }
 
-        MultiElementPager(
+        MultiItemPager(
             firsElementIndexToDisplay = elementIndex,
             elements = elements,
             elementContent = { element ->
@@ -97,7 +95,7 @@ fun Subcompose3() {
 }
 
 @Composable
-private fun MultiElementPager(
+private fun MultiItemPager(
     firsElementIndexToDisplay: Int,
     elements: List<Element>,
     elementContent: @Composable (element: Element) -> Unit,
@@ -117,9 +115,11 @@ private fun MultiElementPager(
             val measurables = subcompose(slotId = elementIndex, content = { elementContent(elements[elementIndex]) })
 
             val currentPlaceables = measurables.map { measurable -> measurable.measure(constraints) }
-            val currentPlaceablesAggregatedHeight = currentPlaceables.fold(0) { accumulator, element -> accumulator + element.height }
+            val currentPlaceablesAggregatedHeight =
+                currentPlaceables.fold(0) { accumulator, element -> accumulator + element.height }
 
-            val previousPlaceablesAggregatedHeight = placeables.fold(0) { accumulator, element -> accumulator + element.height }
+            val previousPlaceablesAggregatedHeight =
+                placeables.fold(0) { accumulator, element -> accumulator + element.height }
 
             if (maxHeight - previousPlaceablesAggregatedHeight < currentPlaceablesAggregatedHeight) {
                 isAvailableSpaceLeft = false
@@ -159,6 +159,6 @@ private fun MultiElementPager(
 
 @Preview
 @Composable
-private fun Subcompose3Preview() {
-    Subcompose3()
+private fun MultiItemPagerUseCasePreview() {
+    MultiItemPagerUseCase()
 }

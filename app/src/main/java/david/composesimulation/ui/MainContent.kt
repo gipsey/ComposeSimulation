@@ -44,9 +44,9 @@ import david.composesimulation.ui.rememberupdatedstate.WronglyShowElapsedSeconds
 import david.composesimulation.ui.state.CorrectlyChangingState
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRemember
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRememberAndMutableState
+import david.composesimulation.ui.subcompose.MultiItemPagerUseCase
 import david.composesimulation.ui.subcompose.SubCompose1
 import david.composesimulation.ui.subcompose.SubCompose2
-import david.composesimulation.ui.subcompose.Subcompose3
 import david.composesimulation.ui.theme.ComposeSimulationTheme
 import kotlinx.coroutines.delay
 
@@ -115,8 +115,8 @@ private fun getDestinations(viewModel: MainViewModel) =
         put("SubCompose2") {
             SubCompose2()
         }
-        put("Subcompose3") {
-            Subcompose3()
+        put("MultiItemPagerUseCase") {
+            MultiItemPagerUseCase()
         }
         put("BoxWithConstraints1") {
             BoxWithConstraints1()
