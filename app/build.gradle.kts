@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose.compiler)
 }
 
 android {
@@ -53,9 +54,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlin.compose.compiler.get()
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -72,6 +70,8 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
     implementation(libs.material3)
+    implementation(libs.material3.window.size)
+    implementation(libs.material3.adaptive.navigation.suite)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)

@@ -28,6 +28,9 @@ import david.composesimulation.ui.boxWithConstraints.BoxWithConstraints1
 import david.composesimulation.ui.derivedstateof.CorrectlyContentWithMoveToTop
 import david.composesimulation.ui.derivedstateof.WrongEmailWithEndOfEmailReachedListener
 import david.composesimulation.ui.derivedstateof.WronglyContentWithMoveToTop
+import david.composesimulation.ui.gesture.AnchoredDraggable
+import david.composesimulation.ui.gesture.DraggableOfEitherHorizontalOrVertical
+import david.composesimulation.ui.gesture.DraggableOfHorizontalAndVertical
 import david.composesimulation.ui.intrinsic.Intrinsic1
 import david.composesimulation.ui.intrinsic.Intrinsic2
 import david.composesimulation.ui.launchedeffect.LaunchedEffectEmailWithMarkAsRead
@@ -97,6 +100,16 @@ private fun Menu(
 
 private fun getDestinations(viewModel: MainViewModel) =
     mutableMapOf<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>().apply {
+        put("DraggableOfEitherHorizontalOrVertical") {
+            DraggableOfEitherHorizontalOrVertical()
+        }
+        put("DraggableOfHorizontalAndVertical") {
+            DraggableOfHorizontalAndVertical()
+        }
+        put("AnchoredDraggable") {
+            AnchoredDraggable()
+        }
+
         put("LayoutModifier1") {
             LayoutModifier1()
         }
