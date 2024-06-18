@@ -69,9 +69,15 @@ dependencies {
     implementation(libs.navigation.compose)
 
     implementation(platform(libs.compose.bom))
+
     implementation(libs.material3)
     implementation(libs.material3.window.size)
     implementation(libs.material3.adaptive.navigation.suite)
+
+    implementation(libs.material3.adaptive)
+    implementation(libs.material3.adaptive.layout)
+    implementation(libs.material3.adaptive.navigation)
+
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)

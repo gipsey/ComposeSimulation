@@ -24,6 +24,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import david.composesimulation.MainViewModel
 import david.composesimulation.description
+import david.composesimulation.ui.adaptive.listdetail.AdaptiveListDetail
+import david.composesimulation.ui.adaptive.navigation.AdaptiveNavigationSuite
 import david.composesimulation.ui.boxWithConstraints.BoxWithConstraints1
 import david.composesimulation.ui.derivedstateof.CorrectlyContentWithMoveToTop
 import david.composesimulation.ui.derivedstateof.WrongEmailWithEndOfEmailReachedListener
@@ -61,7 +63,7 @@ fun MainContent(viewModel: MainViewModel) {
 
         NavHost(
             navController = navController,
-            startDestination = "Menu"
+            startDestination = "AdaptiveListDetail"
         ) {
             composable("Menu") {
                 Menu(navController, destinations)
@@ -100,6 +102,13 @@ private fun Menu(
 
 private fun getDestinations(viewModel: MainViewModel) =
     mutableMapOf<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>().apply {
+        put("AdaptiveNavigationSuite") {
+            AdaptiveNavigationSuite()
+        }
+        put("AdaptiveListDetail") {
+            AdaptiveListDetail()
+        }
+
         put("DraggableOfEitherHorizontalOrVertical") {
             DraggableOfEitherHorizontalOrVertical()
         }
