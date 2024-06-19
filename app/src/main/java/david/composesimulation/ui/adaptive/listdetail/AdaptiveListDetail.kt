@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.collectFoldingFeaturesAsState
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowSize
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
@@ -27,6 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 fun AdaptiveListDetail() {
     val navigator = rememberListDetailPaneScaffoldNavigator()
 
+    println("navigator.scaffoldValue.primary - detail = ${navigator.scaffoldValue.primary}")
+    println("navigator.scaffoldValue.secondary - list = ${navigator.scaffoldValue.secondary}")
+    println("navigator.scaffoldValue.tertiary - extra = ${navigator.scaffoldValue.tertiary}")
+    println("navigator.scaffoldDirective = ${navigator.scaffoldDirective}")
+
+    println("currentWindowAdaptiveInfo() ${currentWindowAdaptiveInfo()}")
+    println("currentWindowSize() ${currentWindowSize()}")
+    println("collectFoldingFeaturesAsState().value ${collectFoldingFeaturesAsState().value}")
+
     BackHandler(enabled = navigator.canNavigateBack()) {
         navigator.navigateBack()
     }
@@ -35,7 +47,7 @@ fun AdaptiveListDetail() {
         directive = navigator.scaffoldDirective,
         value = navigator.scaffoldValue,
         listPane = { ListPane(navigator) },
-        detailPane = { DetailPane() },
+        detailPane = { DetailPane(navigator) },
         extraPane = { ExtraPane() },
         modifier = Modifier
     )
@@ -67,11 +79,12 @@ private fun ThreePaneScaffoldScope.ListPane(navigator: ThreePaneScaffoldNavigato
 }
 
 @Composable
-private fun ThreePaneScaffoldScope.DetailPane() {
+private fun ThreePaneScaffoldScope.DetailPane(navigator: ThreePaneScaffoldNavigator<Nothing>) {
     println("AdaptiveMain - DetailPane")
     AnimatedPane {
-        Box(
-            contentAlignment = Alignment.Center,
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Red)
@@ -79,6 +92,13 @@ private fun ThreePaneScaffoldScope.DetailPane() {
             Text(
                 text = "DetailPane",
             )
+            Button(
+                onClick = { navigator.navigateTo(pane = ThreePaneScaffoldRole.Tertiary) },
+            ) {
+                Text(
+                    text = "To extra",
+                )
+            }
         }
     }
 }
@@ -87,7 +107,16 @@ private fun ThreePaneScaffoldScope.DetailPane() {
 private fun ThreePaneScaffoldScope.ExtraPane() {
     println("AdaptiveMain - ExtraPane")
     AnimatedPane {
-
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Blue)
+        ) {
+            Text(
+                text = "ExtraPane",
+            )
+        }
     }
 }
 
