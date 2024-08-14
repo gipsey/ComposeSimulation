@@ -46,6 +46,7 @@ import david.composesimulation.ui.producestate.WronglyProduceStateWithContinuous
 import david.composesimulation.ui.remembercoroutinescope.SnackbarWithCoroutineScope
 import david.composesimulation.ui.rememberupdatedstate.CorrectlyShowElapsedSecondsInSnackbarAfterDelay
 import david.composesimulation.ui.rememberupdatedstate.WronglyShowElapsedSecondsInSnackbarAfterDelay
+import david.composesimulation.ui.scroll.NestedScroll1
 import david.composesimulation.ui.state.CorrectlyChangingState
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRemember
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRememberAndMutableState
@@ -63,7 +64,7 @@ fun MainContent(viewModel: MainViewModel) {
 
         NavHost(
             navController = navController,
-            startDestination = "AdaptiveListDetail"
+            startDestination = "NestedScroll1"
         ) {
             composable("Menu") {
                 Menu(navController, destinations)
@@ -102,6 +103,10 @@ private fun Menu(
 
 private fun getDestinations(viewModel: MainViewModel) =
     mutableMapOf<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>().apply {
+        put("NestedScroll1") {
+            NestedScroll1()
+        }
+
         put("AdaptiveNavigationSuite") {
             AdaptiveNavigationSuite()
         }

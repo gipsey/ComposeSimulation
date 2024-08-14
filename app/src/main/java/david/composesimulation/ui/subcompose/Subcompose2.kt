@@ -1,7 +1,6 @@
 package david.composesimulation.ui.subcompose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
@@ -16,23 +17,21 @@ import androidx.compose.ui.unit.IntSize
 @Composable
 fun SubCompose2() {
     ResizeWidthColumn(
+        resize = true,
         modifier = Modifier
-            .fillMaxWidth(),
-        resize = true
+            .fillMaxWidth()
+            .clearAndSetSemantics {
+                contentDescription = "monkey"
+            }
     ) {
-        Box(
-            modifier = Modifier
-                .background(Color.Red)
-        ) {
-            Text("Hello")
-        }
-
-        Box(
-            modifier = Modifier
-                .background(Color.Green)
-        ) {
-            Text("This is a long messsage \n and its longer")
-        }
+        Text(
+            text = "Hello",
+            modifier = Modifier.background(Color.Red)
+        )
+        Text(
+            text = "This is a long messsage \n and its longer",
+            modifier = Modifier.background(Color.Green)
+        )
     }
 }
 
