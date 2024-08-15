@@ -47,6 +47,8 @@ import david.composesimulation.ui.remembercoroutinescope.SnackbarWithCoroutineSc
 import david.composesimulation.ui.rememberupdatedstate.CorrectlyShowElapsedSecondsInSnackbarAfterDelay
 import david.composesimulation.ui.rememberupdatedstate.WronglyShowElapsedSecondsInSnackbarAfterDelay
 import david.composesimulation.ui.scroll.NestedScroll1
+import david.composesimulation.ui.scroll.NestedScroll2
+import david.composesimulation.ui.scroll.NestedScrollAutomatic
 import david.composesimulation.ui.state.CorrectlyChangingState
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRemember
 import david.composesimulation.ui.state.WronglyChangingStateWithoutRememberAndMutableState
@@ -105,6 +107,12 @@ private fun getDestinations(viewModel: MainViewModel) =
     mutableMapOf<String, @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit>().apply {
         put("NestedScroll1") {
             NestedScroll1()
+        }
+        put("NestedScroll2") {
+            NestedScroll2()
+        }
+        put("NestedScrollAutomatic") {
+            NestedScrollAutomatic()
         }
 
         put("AdaptiveNavigationSuite") {
