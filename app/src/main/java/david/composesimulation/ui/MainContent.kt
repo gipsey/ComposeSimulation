@@ -49,6 +49,7 @@ import david.composesimulation.ui.rememberupdatedstate.WronglyShowElapsedSeconds
 import david.composesimulation.ui.scroll.NestedScroll1
 import david.composesimulation.ui.scroll.NestedScroll2
 import david.composesimulation.ui.scroll.NestedScroll3
+import david.composesimulation.ui.scroll.NestedScroll4
 import david.composesimulation.ui.scroll.NestedScrollAutomatic
 import david.composesimulation.ui.scroll.NestedScrollLazyColumnIterop
 import david.composesimulation.ui.state.CorrectlyChangingState
@@ -68,7 +69,7 @@ fun MainContent(viewModel: MainViewModel) {
 
         NavHost(
             navController = navController,
-            startDestination = "NestedScroll3"
+            startDestination = "NestedScroll4"
         ) {
             composable("Menu") {
                 Menu(navController, destinations)
@@ -115,6 +116,9 @@ private fun getDestinations(viewModel: MainViewModel) =
         }
         put("NestedScroll3") {
             NestedScroll3()
+        }
+        put("NestedScroll4") {
+            NestedScroll4()
         }
         put("NestedScrollLazyColumnIterop") {
             NestedScrollLazyColumnIterop()

@@ -183,7 +183,7 @@ private val colors = listOf(
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
-private class MyExitUntilCollapsedScrollBehavior(
+ class MyExitUntilCollapsedScrollBehavior(
     override val state: TopAppBarState,
     override val snapAnimationSpec: AnimationSpec<Float>?,
     override val flingAnimationSpec: DecayAnimationSpec<Float>?,
@@ -270,7 +270,7 @@ private class MyExitUntilCollapsedScrollBehavior(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-private suspend fun settleAppBar(
+ suspend fun settleAppBar(
     state: TopAppBarState,
     velocity: Float,
     flingAnimationSpec: DecayAnimationSpec<Float>?,
