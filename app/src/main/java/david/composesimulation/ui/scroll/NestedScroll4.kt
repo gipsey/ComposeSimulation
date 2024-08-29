@@ -27,25 +27,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
-/**
-
-scrollState
-1. when top is dragged/scrolled, then it is written
-scrollBehavior.state.heightOffset = scrollBehavior.state.heightOffset + delta
-2. heightOffset should be applied to top
-
-nested scroll connection
-
-top
-has drag handler
-
-
-
-list
-has nestedScroll (nestedScrollConnection)
-
- */
-
 @Composable
 fun NestedScroll4() {
     val topAppBarState = rememberTopAppBarState(
@@ -135,7 +116,7 @@ private fun Top(
             .background(Color.LightGray)
     ) {
         Text(
-            text = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19"
+            text = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"//\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19"
         )
     }
 }
