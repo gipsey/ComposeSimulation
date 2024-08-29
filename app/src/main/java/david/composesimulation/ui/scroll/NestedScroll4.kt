@@ -46,8 +46,6 @@ has nestedScroll (nestedScrollConnection)
 
  */
 
-private val topHeight = 300.dp
-
 @Composable
 fun NestedScroll4() {
     val topAppBarState = rememberTopAppBarState(
@@ -58,7 +56,6 @@ fun NestedScroll4() {
     val scrollBehavior = myExitUntilCollapsedScrollBehavior(
 //    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         state = topAppBarState,
-//        flingAnimationSpec = null, // a felso tartalom visszahozasa
     )
     val nestedScrollConnection = scrollBehavior.nestedScrollConnection
 
@@ -78,19 +75,16 @@ fun NestedScroll4() {
                         IntOffset(x = 0, y = scrollBehavior.state.heightOffset.roundToInt())
                     }
                     .draggable(
-                    orientation = Orientation.Vertical,
-                    state = rememberDraggableState { delta ->
-                        scrollBehavior.state.heightOffset = scrollBehavior.state.heightOffset + delta
-                    },
-                    onDragStopped = { velocity ->
-                        settleAppBar(
-                            state = scrollBehavior.state,
-                            velocity = velocity,
-                            flingAnimationSpec = scrollBehavior.flingAnimationSpec,
-//                            snapAnimationSpec = null,
-                        )
-                    }
-                )
+                        orientation = Orientation.Vertical,
+                        state = rememberDraggableState { delta -> scrollBehavior.state.heightOffset += delta },
+                        onDragStopped = { velocity ->
+                            settleAppBar(
+                                state = scrollBehavior.state,
+                                velocity = velocity,
+                                flingAnimationSpec = scrollBehavior.flingAnimationSpec!!,
+                            )
+                        }
+                    )
             )
         },
         listContent = { leadingSlotHeightInPx: LeadingSlotHeightInPx ->

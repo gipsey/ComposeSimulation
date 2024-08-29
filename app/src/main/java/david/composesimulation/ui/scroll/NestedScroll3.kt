@@ -3,9 +3,11 @@
 package david.composesimulation.ui.scroll
 
 import androidx.annotation.Px
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.animateTo
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -195,85 +197,58 @@ class MyExitUntilCollapsedScrollBehavior(
 
     internal val nestedScrollConnection =
         object : NestedScrollConnection {
-
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val availableY = available.y
-                println("ddddd onPreScroll 1 - availableY $availableY")
                 // Don't intercept if scrolling down.
-                if (availableY > 0f) return Offset.Zero
+                if (available.y > 0f) return Offset.Zero
 
                 val prevHeightOffset = state.heightOffset
-                println("ddddd onPreScroll 2 - prevHeightOffset $prevHeightOffset")
-                state.heightOffset += availableY
-                println("ddddd onPreScroll 3 - state.heightOffset = ${state.heightOffset}")
-
+                state.heightOffset = state.heightOffset + available.y
                 return if (prevHeightOffset != state.heightOffset) {
                     // We're in the middle of top app bar collapse or expand.
-                    println("ddddd onPreScroll 4 - return ${available.y}")
-                    println("ddddd")
-                    available
+                    // Consume only the scroll on the Y axis.
+                    available.copy(x = 0f)
                 } else {
-                    println("ddddd onPreScroll 4 - return ${Offset.Zero.y}")
-                    println("ddddd")
                     Offset.Zero
                 }
             }
 
-            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                val consumedY = consumed.y
-                val availableY = available.y
-                println("ddddd onPostScroll 1 - consumedY $consumedY")
-                println("ddddd onPostScroll 2 - availableY $availableY")
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                state.contentOffset += consumed.y
 
-                state.contentOffset += consumedY
-                println("ddddd onPostScroll 3 - state.contentOffset ${state.contentOffset}")
-
-                // scrolling up the content
-                if (availableY < 0f || consumedY < 0f) {
-                    println("ddddd onPostScroll 4 - scrolling up -  ${state.contentOffset}")
+                if (available.y < 0f || consumed.y < 0f) {
                     // When scrolling up, just update the state's height offset.
                     val oldHeightOffset = state.heightOffset
-                    state.heightOffset += consumedY
-
-                    println("ddddd")
-                    println("ddddd")
+                    state.heightOffset = state.heightOffset + consumed.y
                     return Offset(0f, state.heightOffset - oldHeightOffset)
                 }
 
-                println("ddddd")
-                println("ddddd")
-                if (consumedY == 0f && availableY > 0) {
+                if (consumed.y == 0f && available.y > 0) {
                     // Reset the total content offset to zero when scrolling all the way down. This
                     // will eliminate some float precision inaccuracies.
                     state.contentOffset = 0f
                 }
 
-                if (availableY > 0f) {
+                if (available.y > 0f) {
                     // Adjust the height offset in case the consumed delta Y is less than what was
                     // recorded as available delta Y in the pre-scroll.
                     val oldHeightOffset = state.heightOffset
-                    state.heightOffset += availableY
-
+                    state.heightOffset = state.heightOffset + available.y
                     return Offset(0f, state.heightOffset - oldHeightOffset)
                 }
-
                 return Offset.Zero
             }
 
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity =
-                settleAppBar(
-                    state = state,
-                    velocity = available.y,
-                    flingAnimationSpec = flingAnimationSpec,
-                )
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                val superConsumed = super.onPostFling(consumed, available)
+                return superConsumed + settleAppBar(state, available.y, flingAnimationSpec)
+            }
         }
 }
 
-/**
- * Settles the app bar by flinging, in case the given velocity is greater than zero, and snapping
- * after the fling settles.
- */
-@OptIn(ExperimentalMaterial3Api::class)
 suspend fun settleAppBar(
     state: TopAppBarState,
     velocity: Float,
@@ -283,14 +258,14 @@ suspend fun settleAppBar(
     // and just return Zero Velocity.
     // Note that we don't check for 0f due to float precision with the collapsedFraction
     // calculation.
-    if (state.collapsedFraction < 0.01f || state.collapsedFraction == 1f) return Velocity.Zero
-
+    if (state.collapsedFraction < 0.01f || state.collapsedFraction == 1f) {
+        return Velocity.Zero
+    }
     var remainingVelocity = velocity
     // In case there is an initial velocity that was left after a previous user fling, animate to
     // continue the motion to expand or collapse the app bar.
     if (abs(velocity) > 1f) {
         var lastValue = 0f
-
         AnimationState(
             initialValue = 0f,
             initialVelocity = velocity,
@@ -298,13 +273,10 @@ suspend fun settleAppBar(
             .animateDecay(flingAnimationSpec) {
                 val delta = value - lastValue
                 val initialHeightOffset = state.heightOffset
-
                 state.heightOffset = initialHeightOffset + delta
                 val consumed = abs(initialHeightOffset - state.heightOffset)
-
                 lastValue = value
                 remainingVelocity = this.velocity
-
                 // avoid rounding errors and stop if anything is unconsumed
                 if (abs(delta - consumed) > 0.5f) this.cancelAnimation()
             }
