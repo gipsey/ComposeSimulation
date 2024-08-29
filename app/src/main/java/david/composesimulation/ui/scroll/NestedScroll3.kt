@@ -26,6 +26,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -72,14 +73,10 @@ fun NestedScroll3() {
         @Px val topHeightPx = remember(topHeight) { with(density) { topHeight.toPx() } }
         println("ddddd topHeightPx ${topHeightPx}")
 
-        val topAppBarState = rememberTopAppBarState(
-            initialHeightOffsetLimit = -topHeightPx,
-            initialHeightOffset = 0f,
-            initialContentOffset = 0f,
-        )
+        val state = rememberSaveable(saver = MyTopAppBarState.Saver) { MyTopAppBarState() }
         val scrollBehavior = myExitUntilCollapsedScrollBehavior(
 //        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-            state = topAppBarState,
+            state = state,
         )
         val nestedScrollConnection = scrollBehavior.nestedScrollConnection
 
@@ -182,16 +179,15 @@ private val colors = listOf(
 @ExperimentalMaterial3Api
 @Composable
 fun myExitUntilCollapsedScrollBehavior(
-    state: TopAppBarState = rememberTopAppBarState(),
+    state: MyTopAppBarState,
 ): MyExitUntilCollapsedScrollBehavior =
     MyExitUntilCollapsedScrollBehavior(
         state = state,
         flingAnimationSpec = rememberSplineBasedDecay(),
     )
 
-@OptIn(ExperimentalMaterial3Api::class)
 class MyExitUntilCollapsedScrollBehavior(
-    internal val state: TopAppBarState,
+    internal val state: MyTopAppBarState,
     internal val flingAnimationSpec: DecayAnimationSpec<Float>,
 ) {
 
@@ -250,7 +246,7 @@ class MyExitUntilCollapsedScrollBehavior(
 }
 
 suspend fun settleAppBar(
-    state: TopAppBarState,
+    state: MyTopAppBarState,
     velocity: Float,
     flingAnimationSpec: DecayAnimationSpec<Float>,
 ): Velocity {
