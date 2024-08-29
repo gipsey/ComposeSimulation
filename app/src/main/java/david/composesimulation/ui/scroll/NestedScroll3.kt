@@ -6,8 +6,11 @@ import androidx.annotation.Px
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.animateTo
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -20,7 +23,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
@@ -182,8 +184,21 @@ private val colors = listOf(
     Color.Magenta,
 )
 
+@ExperimentalMaterial3Api
+@Composable
+fun myExitUntilCollapsedScrollBehavior(
+    state: TopAppBarState = rememberTopAppBarState(),
+    snapAnimationSpec: AnimationSpec<Float>? = spring(stiffness = Spring.StiffnessMediumLow),
+    flingAnimationSpec: DecayAnimationSpec<Float>? = rememberSplineBasedDecay()
+): TopAppBarScrollBehavior =
+    MyExitUntilCollapsedScrollBehavior(
+        state = state,
+        snapAnimationSpec = snapAnimationSpec,
+        flingAnimationSpec = flingAnimationSpec,
+    )
+
 @OptIn(ExperimentalMaterial3Api::class)
- class MyExitUntilCollapsedScrollBehavior(
+private class MyExitUntilCollapsedScrollBehavior(
     override val state: TopAppBarState,
     override val snapAnimationSpec: AnimationSpec<Float>?,
     override val flingAnimationSpec: DecayAnimationSpec<Float>?,
@@ -269,12 +284,16 @@ private val colors = listOf(
         }
 }
 
+/**
+ * Settles the app bar by flinging, in case the given velocity is greater than zero, and snapping
+ * after the fling settles.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
  suspend fun settleAppBar(
     state: TopAppBarState,
     velocity: Float,
     flingAnimationSpec: DecayAnimationSpec<Float>?,
-    snapAnimationSpec: AnimationSpec<Float>?,
+    snapAnimationSpec: AnimationSpec<Float>?
 ): Velocity {
     // Check if the app bar is completely collapsed/expanded. If so, no need to settle the app bar,
     // and just return Zero Velocity.

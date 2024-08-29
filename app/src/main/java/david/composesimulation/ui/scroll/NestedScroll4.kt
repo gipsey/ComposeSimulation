@@ -55,7 +55,7 @@ fun NestedScroll4() {
         initialHeightOffset = 0f,
         initialContentOffset = 0f,
     )
-//    val scrollBehavior = MyExitUntilCollapsedScrollBehavior(
+//    val scrollBehavior = myExitUntilCollapsedScrollBehavior(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         state = topAppBarState,
         snapAnimationSpec = null,
@@ -79,26 +79,24 @@ fun NestedScroll4() {
                         IntOffset(x = 0, y = scrollBehavior.state.heightOffset.roundToInt())
                     }
                     .draggable(
-                        orientation = Orientation.Vertical,
-                        state = rememberDraggableState { delta ->
-                            scrollBehavior.state.heightOffset += delta
-                        },
-                        onDragStopped = { velocity ->
-                            // todo
-//                        nestedScrollConnection.onPostFling(consumed = velocity, available = velocity)
-//                        settleAppBar(
-//                            scrollBehavior.state,
-//                            velocity,
-//                            scrollBehavior.flingAnimationSpec,
-//                            scrollBehavior.snapAnimationSpec
-//                        )
-                        }
-                    )
+                    orientation = Orientation.Vertical,
+                    state = rememberDraggableState { delta ->
+                        scrollBehavior.state.heightOffset = scrollBehavior.state.heightOffset + delta
+                    },
+                    onDragStopped = { velocity ->
+                        settleAppBar(
+                            state = scrollBehavior.state,
+                            velocity = velocity,
+                            flingAnimationSpec = scrollBehavior.flingAnimationSpec,
+                            snapAnimationSpec = scrollBehavior.snapAnimationSpec,
+                        )
+                    }
+                )
             )
         },
         listContent = { leadingSlotHeightInPx: LeadingSlotHeightInPx ->
             println("dddddd listContent leadingSlotHeightInPx $leadingSlotHeightInPx")
-            topAppBarState.heightOffsetLimit = -leadingSlotHeightInPx.toFloat()
+            topAppBarState.heightOffsetLimit = -leadingSlotHeightInPx.toFloat() // todo set it differently
 
             List(
                 modifier = Modifier
@@ -144,7 +142,7 @@ private fun Top(
             .background(Color.LightGray)
     ) {
         Text(
-            text = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+            text = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19"
         )
     }
 }
