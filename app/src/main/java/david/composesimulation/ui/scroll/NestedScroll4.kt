@@ -3,6 +3,9 @@
 package david.composesimulation.ui.scroll
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,29 +63,47 @@ fun NestedScroll4() {
     )
     val nestedScrollConnection = scrollBehavior.nestedScrollConnection
 
-    LaunchedEffect(key1 = Unit) {
-        println("ddddd scrollBehavior.state.heightOffset ${scrollBehavior.state.heightOffset}")
-    }
+    println("ddddd scrollBehavior.state.heightOffsetLimit ${scrollBehavior.state.heightOffsetLimit}")
+    println("ddddd scrollBehavior.state.heightOffset ${scrollBehavior.state.heightOffset}")
+    println("ddddd scrollBehavior.state.contentOffset ${scrollBehavior.state.contentOffset}")
+    println("ddddd scrollBehavior.state.collapsedFraction ${scrollBehavior.state.collapsedFraction}")
+    println("ddddd scrollBehavior.state.overlappedFraction ${scrollBehavior.state.overlappedFraction}")
+    println("ddddd scrollBehavior.state")
 
     ContentLayout(
         leadingContent = {
+            println("dddddd leadingContent")
             Top(
                 modifier = Modifier
                     .offset {
-                        println("ddddd scrollBehavior.state.heightOffset ${scrollBehavior.state.heightOffset}")
                         IntOffset(x = 0, y = scrollBehavior.state.heightOffset.roundToInt())
                     }
+                    .draggable(
+                        orientation = Orientation.Vertical,
+                        state = rememberDraggableState { delta ->
+                            scrollBehavior.state.heightOffset += delta
+                        },
+                        onDragStopped = { velocity ->
+                            // todo
+//                        nestedScrollConnection.onPostFling(consumed = velocity, available = velocity)
+//                        settleAppBar(
+//                            scrollBehavior.state,
+//                            velocity,
+//                            scrollBehavior.flingAnimationSpec,
+//                            scrollBehavior.snapAnimationSpec
+//                        )
+                        }
+                    )
             )
         },
         listContent = { leadingSlotHeightInPx: LeadingSlotHeightInPx ->
-            println("dddddd leadingSlotHeightInPx $leadingSlotHeightInPx")
+            println("dddddd listContent leadingSlotHeightInPx $leadingSlotHeightInPx")
             topAppBarState.heightOffsetLimit = -leadingSlotHeightInPx.toFloat()
 
             List(
                 modifier = Modifier
                     .nestedScroll(nestedScrollConnection)
                     .offset {
-                        println("ddddd scrollBehavior.state.heightOffset ${scrollBehavior.state.heightOffset}")
                         IntOffset(x = 0, y = (leadingSlotHeightInPx + scrollBehavior.state.heightOffset).roundToInt())
                     }
             )
@@ -124,7 +144,7 @@ private fun Top(
             .background(Color.LightGray)
     ) {
         Text(
-            text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
+            text = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
         )
     }
 }
