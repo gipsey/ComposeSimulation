@@ -55,11 +55,10 @@ fun NestedScroll4() {
         initialHeightOffset = 0f,
         initialContentOffset = 0f,
     )
-//    val scrollBehavior = myExitUntilCollapsedScrollBehavior(
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+    val scrollBehavior = myExitUntilCollapsedScrollBehavior(
+//    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         state = topAppBarState,
-        snapAnimationSpec = null,
-        flingAnimationSpec = null,
+//        flingAnimationSpec = null, // a felso tartalom visszahozasa
     )
     val nestedScrollConnection = scrollBehavior.nestedScrollConnection
 
@@ -88,7 +87,7 @@ fun NestedScroll4() {
                             state = scrollBehavior.state,
                             velocity = velocity,
                             flingAnimationSpec = scrollBehavior.flingAnimationSpec,
-                            snapAnimationSpec = scrollBehavior.snapAnimationSpec,
+//                            snapAnimationSpec = null,
                         )
                     }
                 )
